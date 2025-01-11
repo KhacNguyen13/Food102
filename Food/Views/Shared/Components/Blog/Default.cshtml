@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Food.Models.BBlog>
+
+<div class="container">
+    <div class="row">
+        @foreach (var item in Model.Take(3))
+        {
+            string sUrl = $"/blog/{item.BlogId}.html";
+            <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
+                <div class="blog__item">
+                    <div class="blog__item__pic">
+                        <img src="~/img/@item.Image" alt="@sUrl" class="img-fluid">
+                    </div>
+                    <div class="blog-content mx-4 d-flex rounded bg-light">
+                        <div class="text-dark bg-primary rounded-start">
+                            <div class="h-100 p-3 d-flex flex-column justify-content-center text-center">
+                                <p class="fw-bold mb-0">@item.CreatedAt?.Day</p>
+                                <p class="fw-bold mb-0">@item.CreatedAt?.ToString("MMM")</p>
+                            </div>
+                        </div>
+                        <h5><a href="@sUrl">@item.Title</a></h5>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

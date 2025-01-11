@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Food.Models.BProduct>
+
+<div class="row g-4">
+    @foreach (var product in Model)
+    {
+        <div class="col-lg-6 wow bounceInUp" data-wow-delay="0.1s" style="visibility: visible; animation-name: bounceInUp;">
+            <div class="menu-item d-flex align-items-center">
+                <a href="@Url.Action("Details", "Product", new { id = product.ProductId })" >
+                    <img src="@(string.IsNullOrEmpty(product.ImageUrl)
+                    ? Url.Content("~/img/default-product.jpg")
+                    : Url.Content($"~/img/{product.ImageUrl}"))"
+                     class="flex-shrink-0 img-fluid rounded-circle"
+                         alt="@product.ProductName">
+                </a>
+                <div class="w-100 d-flex flex-column text-start ps-4">
+                    <div class="d-flex justify-content-between border-bottom border-primary pb-2 mb-2">
+                        <h4>@product.ProductName</h4>
+                        <div class="price-box pb-1">
+                            @if (product.PriceSale == 0)
+                            {
+                                <span class="new-price text-danger">@product.Price đ</span>
+                            }
+                            else
+                            {
+                                <span class="new-price text-danger">@product.PriceSale đ</span>
+                                <span class="old-price text-primary" style="text-decoration: line-through;">@product.Price đ</span>
+                            }
+                        </div>
+
+                    </div>
+                    <p class="mb-0">@(!string.IsNullOrEmpty(product.Description) ? product.Description : "No description available")</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>

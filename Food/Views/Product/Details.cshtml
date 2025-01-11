@@ -1,0 +1,192 @@
+﻿@model Food.Models.BProduct
+@{
+    var product = ViewBag.Product as Food.Models.BProduct;
+    var productReviews = ViewBag.ProductReviews as List<Food.Models.BProductReview>;
+    var carts = ViewBag.Carts as Food.Models.BCart;
+}
+
+<section class="product-details spad">
+    <div class="container ">
+        <div class="row align-items-center">
+            <div class="col-lg-6 col-md-6 ">
+                <div class="product-details__image">
+                    <img src="@Url.Content("~/img/" + product.ImageUrl)" alt="Product Image" class="d-block mx-auto img-fluid" width="100%" height="auto" />
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="product-details__text">
+                    <h3>@product.ProductName</h3>
+                    <p>@product.Description</p>
+                    <div class="product__details__quantity d-flex align-items-center mb-3">
+                        <div class="input-group">
+                            <button class="btn btn-outline-secondary decrement" type="button">-</button>
+                            <input type="text" class="form-control text-center qty-input" value="1" style="max-width: 60px;">
+                            <button class="btn btn-outline-secondary increment" type="button">+</button>
+                        </div>
+                    </div>
+                    <div class="py-1">
+                        <a href="#" class="btn btn-primary ">Thêm vào giỏ</a>
+                        <a href="@Url.Action("Index", "Cart")" class="cart-icon"><span class="bi bi-cart"></span></a>
+                    </div>
+                    <ul>
+
+                        <li> <b>Còn</b> <span>  @Model.StockQuantity<samp> sản phẩm</samp></span></li>
+
+                        <li>
+                            <b>Chia sẻ </b>
+                            <div class="share">
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                                <a href="#"><i class="fa fa-instagram"></i></a>
+                                <a href="#"><i class="fa fa-pinterest"></i></a>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="price-box pb-1">
+                        @if (product.PriceSale == 0)
+                        {
+                            <span class="new-price text-danger">@product.Price đ</span>
+                        }
+                        else
+                        {
+                            <span class="new-price text-danger">@product.PriceSale đ</span>
+                            <span class="old-price text-primary" style="text-decoration: line-through;">@product.Price đ</span>
+                        }
+                    </div>
+                </div>
+                <div class=" py-3">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <img src="@Url.Content("~/img/" + product.ImageUrl)" alt="Product Image" class="d-block mx-auto img-fluid" />
+                        </div>
+                        <div class="col-md-3">
+                            <img src="@Url.Content("~/img/" + product.ImageUrl)" alt="Product Image" class="d-block mx-auto img-fluid" />
+                        </div>
+                        <div class="col-md-3">
+                            <img src="@Url.Content("~/img/" + product.ImageUrl)" alt="Product Image" class="d-block mx-auto img-fluid"  />
+                        </div>
+                        <div class="col-md-3">
+                            <img src="@Url.Content("~/img/" + product.ImageUrl)" alt="Product Image" class="d-block mx-auto img-fluid"  />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row py-6 col-md-9 mx-auto">
+            <div class="row d-flex justify-content-center align-items-center">
+                <div class="product-comment pt-10">
+                    <h4>@productReviews?.Count() Bình luận</h4>
+
+                    @if (productReviews != null && productReviews.Any())
+                    {
+                        foreach (var comment in productReviews)
+                        {
+                            <div class="product-comment-item mb-8">
+                                <div class="user-meta">
+                                    <strong>@comment.Name</strong>
+                                    <span>@comment.CreatedDate?.ToString("dd/MM/yyyy")</span>
+                                </div>
+                                <p>@comment.Detail</p>
+                                <p><strong>Đánh giá:</strong> @comment.Star sao</p>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>Chưa có bình luận nào.</p>
+                    }
+                </div>
+
+                <div class="feedback-area mt-5">
+                    <h4>Gửi bình luận</h4>
+                    <form id="comment-form">
+                        <input type="text" id="name" name="name" class="form-control mb-3" placeholder="Tên của bạn" required />
+                        <input type="text" id="Phone" name="Phone" class="form-control mb-3" placeholder="Số điện thoại" required />
+                        <input type="text" id="Email" name="Email" class="form-control mb-3" placeholder="Email" required />
+                        <textarea name="message" id="message" class="form-control mb-3" rows="5" placeholder="Nội dung bình luận" required></textarea>
+
+                        <div class="star-rating mb-3">
+                            <label>
+                                <input type="radio" name="star" value="1" /> 1
+                            </label>
+                            <label>
+                                <input type="radio" name="star" value="2" /> 2
+                            </label>
+                            <label>
+                                <input type="radio" name="star" value="3" /> 3
+                            </label>
+                            <label>
+                                <input type="radio" name="star" value="4" /> 4
+                            </label>
+                            <label>
+                                <input type="radio" name="star" value="5" /> 5
+                            </label>
+                        </div>
+                        <button type="button" id="submit-comment" class="btn btn-primary">Gửi</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    document.querySelector('.decrement').addEventListener('click', function () {
+        const input = document.querySelector('.qty-input');
+        let value = parseInt(input.value) || 1;
+        if (value > 1) {
+            input.value = value - 1;
+        }
+    });
+
+    document.querySelector('.increment').addEventListener('click', function () {
+        const input = document.querySelector('.qty-input');
+        let value = parseInt(input.value) || 1;
+        input.value = value + 1;
+    });
+</script>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#submit-comment').click(function () {
+                var name = $('#name').val();
+                var phone = $('#Phone').val();
+                var email = $('#Email').val();
+                var message = $('#message').val();
+                var star = $('input[name="star"]:checked').val();
+                var productId = '@Model.ProductId';
+
+                if (name && message && star) {
+                    $.ajax({
+                        url: '@Url.Action("Create", "Product")',
+                        method: 'POST',
+                        data: {
+                            name: name,
+                            phone: phone,
+                            email: email,
+                            message: message,
+                            star: star,
+                            ProductId: productId
+                        },
+                        success: function (response) {
+                            if (response.status) {
+                                alert('Bình luận thành công');
+                                location.reload();
+                            } else {
+                                alert('Có lỗi xảy ra');
+                            }
+                        },
+                        error: function () {
+                            alert('Có lỗi xảy ra');
+                        }
+                    });
+                } else {
+                    alert('Vui lòng điền đầy đủ thông tin và chọn đánh giá sao');
+                }
+            });
+        });
+    </script>
+}

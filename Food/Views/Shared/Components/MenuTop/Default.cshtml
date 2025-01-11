@@ -1,0 +1,8 @@
+﻿@using Food.Models
+
+@model List<BMenu> 
+
+@foreach (var menu in Model)
+{
+    <a href="@menu.Alias" class="nav-item nav-link">@menu.Title</a>
+}

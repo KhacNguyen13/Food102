@@ -1,0 +1,91 @@
+﻿@model Food.Models.BBlog
+@{
+    var blog = ViewBag.Blog as Food.Models.BBlog;
+    var blogComments = ViewBag.BlogComments as List<Food.Models.BBlogComment>;
+}
+
+<section class="blog-details spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-7 ">
+                <div class="blog__details__text">
+                    <img src="@Url.Content("~/img/" + blog.Image)" alt="Blog Image" class="d-block mx-auto img-fluid mb-4" width="700" height="350" />
+                    <h3>@blog.Title</h3>
+                    <p>@blog.Comment</p>
+                </div>
+                <div class="blog-comment pt-10">
+                    <h4>@blogComments?.Count() Bình luận</h4>
+
+                    @if (blogComments != null && blogComments.Any())
+                    {
+                        foreach (var comment in blogComments)
+                        {
+                            <div class="blog-comment-item mb-8">
+                                <div class="user-meta">
+                                    <strong>@comment.Name</strong>
+                                    <span>@comment.CreatedDate?.ToString("dd/MM/yyyy")</span>
+                                </div>
+                                <p>@comment.Detail</p>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>Chưa có bình luận nào.</p>
+                    }
+                </div>
+                <div class="feedback-area mt-5">
+                    <h4>Gửi bình luận</h4>
+                    <form id="comment-form">
+                        <input type="text" id="name" name="name" class="form-control mb-3" placeholder="Tên của bạn" required />
+                        <input type="text" id="Phone" name="Phone" class="form-control mb-3" placeholder="Số điện thoại" required />
+                        <input type="text" id="Email" name="Email" class="form-control mb-3" placeholder="Email " required />
+                        <textarea name="message" id="message" class="form-control mb-3" rows="5" placeholder="Nội dung bình luận" required></textarea>
+                        <button type="button" id="submit-comment" class="btn btn-primary">Gửi</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#submit-comment').click(function () {
+                var name = $('#name').val();
+                var Phone = $('#Phone').val();
+                var Email = $('#Email').val();
+                var message = $('#message').val();
+                var blogId = '@Model.BlogId'; // Dùng BlogId từ model
+
+                if (name && message) {
+                    $.ajax({
+                        url: '@Url.Action("Create", "Blog")',
+                        method: 'POST',
+                        data: {
+                            name: name,
+                            Phone: Phone,
+                            Email: Email,
+                            message: message,
+                            blogId: blogId
+                        },
+                        success: function (response) {
+                            if (response.status) {
+                                alert('Bình luận thành công');
+                                location.reload(); // Làm mới trang để hiển thị bình luận mới
+                            } else {
+                                alert('Có lỗi xảy ra');
+                            }
+                        },
+                        error: function () {
+                            alert('Có lỗi xảy ra');
+                        }
+                    });
+                } else {
+                    alert('Vui lòng điền đầy đủ thông tin');
+                }
+            });
+        });
+    </script>
+}

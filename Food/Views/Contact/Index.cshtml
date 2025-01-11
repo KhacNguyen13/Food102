@@ -1,0 +1,57 @@
+﻿<section class="blog-details spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-7">
+                <div class="feedback-area mt-5">
+                    <h4>Gửi bình luận</h4>
+                    <form id="comment-form">
+                        <input type="text" id="name" name="name" class="form-control mb-3" placeholder="Tên của bạn" required />
+                        <input type="text" id="phone" name="phone" class="form-control mb-3" placeholder="Số điện thoại" />
+                        <input type="email" id="email" name="email" class="form-control mb-3" placeholder="Email" required />
+                        <textarea name="message" id="message" class="form-control mb-3" rows="5" placeholder="Nội dung bình luận" required></textarea>
+                        <button type="button" id="submit-comment" class="btn btn-primary">Gửi</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#submit-comment').click(function () {
+                var name = $('#name').val();
+                var phone = $('#phone').val();
+                var email = $('#email').val();
+                var message = $('#message').val();
+
+                if (name && message) {
+                    $.ajax({
+                        url: '@Url.Action("Create", "Contact")', // Correct Controller and Action
+                        method: 'POST',
+                        data: {
+                            name: name,
+                            phone: phone,
+                            email: email,
+                            message: message
+                        },
+                        success: function (response) {
+                            if (response.status) {
+                                alert('Bình luận thành công');
+                                location.reload(); // Refresh the page to display the new comment
+                            } else {
+                                alert('Có lỗi xảy ra: ' + response.error);
+                            }
+                        },
+                        error: function () {
+                            alert('Có lỗi xảy ra trong quá trình gửi dữ liệu.');
+                        }
+                    });
+                } else {
+                    alert('Vui lòng điền đầy đủ thông tin bắt buộc.');
+                }
+            });
+        });
+    </script>
+}
