@@ -4,23 +4,22 @@
     var blogComments = ViewBag.BlogComments as List<Food.Models.BBlogComment>;
 }
 
-<section class="blog-details spad">
+<section class="blog-details spad d-flex align-items-center justify-content-center">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-md-7 ">
-                <div class="blog__details__text">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-8">
+                <div class="blog__details__text text-center">
                     <img src="@Url.Content("~/img/" + blog.Image)" alt="Blog Image" class="d-block mx-auto img-fluid mb-4" width="700" height="350" />
                     <h3>@blog.Title</h3>
                     <p>@blog.Comment</p>
                 </div>
-                <div class="blog-comment pt-10">
+                <div class="blog-comment pt-4">
                     <h4>@blogComments?.Count() Bình luận</h4>
-
                     @if (blogComments != null && blogComments.Any())
                     {
                         foreach (var comment in blogComments)
                         {
-                            <div class="blog-comment-item mb-8">
+                            <div class="blog-comment-item mb-3">
                                 <div class="user-meta">
                                     <strong>@comment.Name</strong>
                                     <span>@comment.CreatedDate?.ToString("dd/MM/yyyy")</span>
@@ -36,12 +35,20 @@
                 </div>
                 <div class="feedback-area mt-5">
                     <h4>Gửi bình luận</h4>
-                    <form id="comment-form">
-                        <input type="text" id="name" name="name" class="form-control mb-3" placeholder="Tên của bạn" required />
-                        <input type="text" id="Phone" name="Phone" class="form-control mb-3" placeholder="Số điện thoại" required />
-                        <input type="text" id="Email" name="Email" class="form-control mb-3" placeholder="Email " required />
-                        <textarea name="message" id="message" class="form-control mb-3" rows="5" placeholder="Nội dung bình luận" required></textarea>
-                        <button type="button" id="submit-comment" class="btn btn-primary">Gửi</button>
+                    <form id="comment-form" class="text-center">
+                        <div class="mb-3">
+                            <input type="text" id="name" name="name" class="form-control" placeholder="Tên của bạn" required />
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" id="Phone" name="Phone" class="form-control" placeholder="Số điện thoại" required />
+                        </div>
+                        <div class="mb-3">
+                            <input type="email" id="Email" name="Email" class="form-control" placeholder="Email" required />
+                        </div>
+                        <div class="mb-3">
+                            <textarea name="message" id="message" class="form-control" rows="5" placeholder="Nội dung bình luận" required></textarea>
+                        </div>
+                        <button type="button" id="submit-comment" class="w-100 btn btn-primary form-control p-3 border-primary bg-primary rounded-pill">Gửi</button>
                     </form>
                 </div>
             </div>
